@@ -1,0 +1,10 @@
+name: research-radar-new
+
+services:
+  research-radar:
+    image: ${RADAR_IMAGE_REPOSITORY:?Set RADAR_IMAGE_REPOSITORY}:${RADAR_IMAGE_TAG:?Set RADAR_IMAGE_TAG}
+    ports:
+      - "127.0.0.1:8502:8501"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
