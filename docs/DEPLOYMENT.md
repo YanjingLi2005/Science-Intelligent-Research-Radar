@@ -1,6 +1,6 @@
 # 独立部署 Research Radar
 
-本仓库的 GitHub Actions 工作流仅在手动点击 **Run workflow** 时运行。它在 GitHub 上构建镜像，推送到私有 GHCR，然后通过 SSH 在服务器上部署一套独立服务。服务器不需要从 GitHub 拉取源码，本地电脑也不需要运行 Docker Desktop。
+本仓库的 GitHub Actions 工作流在每次推送到 `main` 分支时自动运行，也可以手动点击 **Run workflow**。它在 GitHub 上构建镜像，推送到私有 GHCR，然后通过 SSH 在服务器上部署一套独立服务。服务器不需要从 GitHub 拉取源码，本地电脑也不需要运行 Docker Desktop。
 
 新服务使用 `/root/research-radar-new`、Compose 项目 `research-radar-new` 和独立的 `data/` 目录。它只监听服务器本机的 `127.0.0.1:8502`，不会覆盖原有 `/root/research-radar`、其数据目录或占用 80/443/8080 端口的 Caddy。
 
@@ -22,7 +22,7 @@
 
 ## 部署
 
-在仓库的 **Actions → Deploy Independent Research Radar → Run workflow** 中选择 `standard`。`enhanced` 会安装额外的本地 AI/PDF 依赖，镜像更大。工作流会把 `docker-compose.new.yml` 和 `scripts/deploy_new_server.sh` 放到新目录，拉取以当前提交 SHA 标记的镜像，启动服务，并检查 `http://127.0.0.1:8502/api/health`。
+推送到 `main` 分支时会自动以 `standard` 配置部署。也可以在仓库的 **Actions → Deploy Independent Research Radar → Run workflow** 中手动选择 `standard` 或 `enhanced`；`enhanced` 会安装额外的本地 AI/PDF 依赖，镜像更大。工作流会把 `docker-compose.new.yml` 和 `scripts/deploy_new_server.sh` 放到新目录，拉取以当前提交 SHA 标记的镜像，启动服务，并检查 `http://127.0.0.1:8502/api/health`。
 
 首次验证可在本机建立 SSH 隧道，不需要开放新公网端口：
 

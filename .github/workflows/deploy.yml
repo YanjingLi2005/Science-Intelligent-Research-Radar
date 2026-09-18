@@ -1,6 +1,9 @@
 name: Deploy Independent Research Radar
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       profile:
@@ -60,7 +63,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          profile="${{ inputs.profile }}"
+          profile="${{ inputs.profile || 'standard' }}"
           case "${profile}" in
             standard) extras="" ;;
             enhanced) extras="full" ;;
