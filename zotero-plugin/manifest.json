@@ -1,0 +1,13 @@
+{
+  "manifestVersion": 2,
+  "name": "Research Radar for Zotero",
+  "version": "0.1.0",
+  "description": "把 Zotero 条目一键加入 Research Radar 监控案例",
+  "author": "Research Radar",
+  "applications": {
+    "zotero": {
+      "id": "research-radar@local",
+      "update_url": ""
+    }
+  }
+}

@@ -1,0 +1,14 @@
+Generate a lightweight overview of the supplied manuscript before extracting claims.
+
+Extract ONLY the following structured information:
+- research_problem: One sentence describing the core problem.
+- domain: The research domain (e.g., NLP, CV, RL, Systems).
+- main_methods: List of key methods/architectures/algorithms.
+- datasets: List of datasets used for evaluation.
+- key_variables: Important variables, metrics, or hyper-parameters.
+- likely_contributions: What the paper is likely contributing.
+- author_terms: Words the authors use for their OWN work (our, proposed, this work, we).
+- cited_work_markers: Words used for CITED work (et al., previous, existing, prior).
+
+Do NOT extract claims. This is a pre-processing step only.
+Return valid JSON matching the ManuscriptOverview schema.

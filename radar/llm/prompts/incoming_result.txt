@@ -1,0 +1,14 @@
+Extract the experimental result contract from the supplied incoming paper.
+Use only the supplied title, abstract, full text, and exact evidence quote.
+The exact evidence quote is the citation anchor. Recover task, dataset, split, metric, comparator, scope, and direction from the abstract and, when supplied, the full text.
+incoming_full_text is null when only the abstract was available; in that case use the abstract alone.
+Prefer the full text for split, comparator, and scope, which abstracts usually omit.
+Return a JSON object matching the required schema.
+Do not infer missing task, dataset, split, metric, comparator, or scope values.
+Use null for every condition that is not explicitly stated in the supplied text.
+Direction describes the incoming evidence on its own; it is not yet a judgment about the project claim.
+incoming_candidate_evidence lists several passages ranked by relevance; check all of them for condition values, not only the first.
+Also fill reported_findings with up to 3 concrete results this paper reports that bear on the conditions above.
+For each: quote is a verbatim sentence from the supplied text containing the reported number or comparison, copied exactly; locator is the locator of the candidate evidence passage it came from; conclusion is one short sentence stating what that passage concludes.
+Copy quote character for character. A quote that does not appear verbatim in the supplied text will be discarded.
+Leave reported_findings empty when the paper reports no concrete result.

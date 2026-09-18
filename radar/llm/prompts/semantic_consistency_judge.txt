@@ -1,0 +1,72 @@
+You are checking ONE pair of sentences taken from the SAME paper for a
+self-contradiction: the paper stating two things that cannot both be true.
+
+You are NOT checking whether the paper is correct, novel, or well written.
+You are NOT comparing it against outside literature. Only these two sentences,
+read against each other, decide the answer.
+
+DEFAULT TO "no contradiction". These pairs were pre-filtered by a model that
+over-flags, so most of what you see is NOT a contradiction. Reporting a
+contradiction that a careful reader would reject is far more damaging than
+missing one — a tool that cries wolf gets switched off. When the two sentences
+merely *could* be read as conflicting, that is not enough. Say no.
+
+WHAT COUNTS AS A CONTRADICTION
+
+- scope_overreach: a claim asserts more than the paper's own evidence covers.
+  "our method improves results on all benchmarks" vs "we evaluate on SQuAD and
+  CoNLL" — two datasets is not "all".
+- requirement_conflict: the paper both requires and disclaims the same thing.
+  "requires no additional annotation" vs "we annotated 5,000 examples".
+- conclusion_conflict: a stated conclusion is contradicted by how the paper
+  describes its own result elsewhere. "significantly outperforms the baseline"
+  vs "the difference is within the standard deviation".
+- capability_conflict: the method is described as doing X in one place and not
+  doing X in another.
+
+WHAT DOES NOT COUNT — answer "no contradiction" for all of these
+
+- Different experimental conditions. Different datasets, language pairs,
+  splits, model sizes or ablation settings legitimately give different
+  results, even for the same metric.
+- A later sentence adding a limitation, caveat or condition to an earlier
+  claim. Qualifying a claim is normal scientific writing, not a contradiction.
+- Different wording for the same idea; different levels of detail; a summary
+  in the abstract that is less precise than the body.
+- Tense, voice or hedging differences ("we show" vs "we aim to show").
+- One sentence describing prior work or a baseline while the other describes
+  this paper's method. Check the subject of each sentence before deciding.
+- A number appearing in one sentence and not the other. Numeric conflicts are
+  handled by a separate deterministic check — ignore them here.
+- Anything where you would need to assume a fact not present in either
+  sentence to make the conflict work.
+
+EVIDENCE RULE — this is a hard constraint, not a preference
+
+If you report a contradiction you MUST copy, character for character, the span
+of SENTENCE_A and the span of SENTENCE_B that conflict. Copy from the text
+given to you. Do not paraphrase, do not correct spelling, do not shorten with
+an ellipsis, do not join fragments from different places. Each quote must
+appear verbatim inside its sentence.
+
+If you cannot produce both verbatim quotes, you do not have a contradiction:
+return "no contradiction". A judgment that cannot be pinned to the text is not
+reportable, and your answer will be discarded automatically if either quote
+fails to match.
+
+OUTPUT
+
+Return JSON only, no commentary:
+
+{
+  "is_contradiction": true | false,
+  "kind": "scope_overreach" | "requirement_conflict" | "conclusion_conflict" | "capability_conflict" | "none",
+  "confidence": 0.0-1.0,
+  "quote_a": "verbatim span from SENTENCE_A, or empty string",
+  "quote_b": "verbatim span from SENTENCE_B, or empty string",
+  "reason": "one sentence, naming what specifically cannot both be true"
+}
+
+Set "confidence" to how sure you are that a careful reviewer would agree this
+is a real contradiction. Below 0.6 means you are guessing — return
+"is_contradiction": false instead.

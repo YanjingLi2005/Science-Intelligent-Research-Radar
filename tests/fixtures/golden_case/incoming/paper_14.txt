@@ -1,0 +1,1 @@
+A multichannel acoustic model separates overlapping speech in reverberant indoor environments.

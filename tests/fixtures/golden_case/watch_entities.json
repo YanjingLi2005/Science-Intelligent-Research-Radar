@@ -1,0 +1,4 @@
+[
+  {"id":"watch-01","entity_type":"lab","canonical_name":"Nova Retrieval Lab","aliases":["NovaLab","Nova Retrieval"]},
+  {"id":"watch-02","entity_type":"author","canonical_name":"Li Chen","aliases":["Chen, Li","L. Chen"]}
+]

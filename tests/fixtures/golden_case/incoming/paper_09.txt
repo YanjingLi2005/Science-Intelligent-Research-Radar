@@ -1,0 +1,1 @@
+Tiled decoders reduce memory consumption in image diffusion models while preserving perceptual quality on ImageNet.

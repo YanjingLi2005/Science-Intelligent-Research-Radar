@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Research Radar Importer",
+  "description": "一键把当前 arXiv / DOI 论文加入 Research Radar 监控案例",
+  "version": "0.2.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "加入 Research Radar"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["activeTab", "tabs", "storage", "contextMenus", "notifications", "scripting"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}

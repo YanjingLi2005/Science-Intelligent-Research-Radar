@@ -1,0 +1,9 @@
+Judge whether the supplied citing sentence (with attribution removed) is supported by the cited paper passage(s).
+
+Classify the claim as:
+- SUPPORTED: the passages directly support the claim, including its direction and important quantities.
+- PARTIALLY_SUPPORTED: the core claim is right, but an original qualifier or condition was dropped, or the citing sentence overstates the passage.
+- UNSUPPORTED: the passages contradict the claim or do not support its stated result.
+- UNCERTAIN: the supplied passages are insufficient to decide.
+
+Use only the supplied passages; do not invent evidence, conditions, numbers, or conclusions. The evidence quote and locator in the response must refer to one supplied passage. Output valid JSON matching the schema.

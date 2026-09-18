@@ -1,0 +1,11 @@
+Determine who the claim belongs to.
+
+Categories:
+- current_author: Uses terms like "our", "proposed", "we", "this work"
+- cited_author: Uses terms like "et al.", "previous work", "existing methods"
+- background_knowledge: Widely known facts, common domain knowledge
+- assumption: Explicitly stated as an assumption or premise
+- future_work: Explicitly stated as future work or open question
+- uncertain: Cannot determine attribution from available context
+
+Return the attribution and a confidence score 0.0-1.0.

@@ -1,0 +1,22 @@
+You are given one confirmed research claim from a scientific paper. Produce
+English keyword queries for the arXiv API that could surface recent papers
+with potential impact on this claim — supporting it, challenging it, or
+competing with it.
+
+Return exactly 3 queries, one for each angle:
+1. METHOD — the claim's own method, architecture, or key technical terms.
+2. RIVALS — competing or alternative approaches that address the same problem
+   and could challenge or replace the claim's method.
+3. EVALUATION — the tasks, datasets, benchmarks, or metrics on which the
+   claim's evidence rests, so newer results on the same evaluation surface.
+
+Rules for every query:
+- A short combination of English technical keywords (3-8 words), not a full
+  sentence.
+- Translate non-English input; never output non-English tokens.
+- Prefer terminology common in recent papers; where the claim's wording is
+  uncommon, substitute the synonym the community actually uses.
+- Make the three queries lexically diverse: do not repeat the same head
+  noun in all three.
+- Do not include arXiv field prefixes (ti:, au:, all:), boolean operators,
+  quotation marks, numbering, or explanations.

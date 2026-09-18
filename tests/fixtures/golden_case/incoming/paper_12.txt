@@ -1,0 +1,1 @@
+Local search finds improved approximation bounds for weighted graph coloring instances.

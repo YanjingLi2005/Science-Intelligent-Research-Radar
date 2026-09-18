@@ -1,0 +1,1 @@
+With 20% retrieval noise on DomainQA, RadarNet retains 65.9% exact match across five seeds. This independent stress test supports robustness to corrupted evidence passages.

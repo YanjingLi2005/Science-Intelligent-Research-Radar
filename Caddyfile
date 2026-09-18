@@ -1,0 +1,19 @@
+# TLS 说明（iOS 兼容版）：
+# - iOS Safari 对自签名证书没有"继续访问"入口，强制 301 跳 https 会让 iPhone 直接打不开。
+# - 因此 :80 直接提供 HTTP（iOS/手机端打开 http://IP 即可）；:443 保留自签名 HTTPS
+#   给接受证书的桌面端。等有真实域名后，把站点地址换成域名、删掉 tls 指令，
+#   Caddy 会自动签发 Let's Encrypt 证书，届时可以把 80 改回跳转 HTTPS。
+http://:80 {
+    reverse_proxy research-radar:8501
+}
+
+# Fallback HTTP port for networks/ISPs that block port 80.
+# Mobile clients can then open http://<server-ip>:8080 .
+http://:8080 {
+    reverse_proxy research-radar:8501
+}
+
+https://:443 {
+    tls /certs/cert.pem /certs/key.pem
+    reverse_proxy research-radar:8501
+}

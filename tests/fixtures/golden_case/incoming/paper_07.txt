@@ -1,0 +1,1 @@
+The CleanEval relevance judgments are retracted after leakage between annotation and evaluation sets was confirmed. Results depending on the released judgments should be revalidated.

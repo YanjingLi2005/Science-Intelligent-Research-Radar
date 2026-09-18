@@ -1,0 +1,42 @@
+services:
+  research-radar:
+    image: ${RADAR_IMAGE_REPOSITORY:-ghcr.io/gz-november/research-radar}:${RADAR_IMAGE_TAG:-local}
+    # Retained for local development. CI builds and pushes the image; the
+    # server deployment pulls it and runs with --no-build.
+    build:
+      context: .
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+        INSTALL_EXTRAS: ${RADAR_INSTALL_EXTRAS:-}
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cpu/}
+    # Internal only; Caddy terminates TLS on 80/443 and proxies here.
+    expose:
+      - "8501"
+    # SQLite database and settings saved via the Settings page live under data/;
+    # mounting this volume preserves them across container rebuilds.
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    # To reach a local Ollama instance (macOS / Windows):
+    # set the Ollama base URL to http://host.docker.internal:11434 in the
+    # Settings page.  On Linux uncomment the two lines below:
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./certs:/certs:ro
+      - caddy_data:/data
+    restart: unless-stopped
+    depends_on:
+      - research-radar
+
+volumes:
+  caddy_data:

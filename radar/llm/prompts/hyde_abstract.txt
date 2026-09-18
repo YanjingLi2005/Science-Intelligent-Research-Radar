@@ -1,0 +1,10 @@
+Write the abstract of a hypothetical recent paper that would be highly
+relevant to the supplied research question and confirmed claims.
+
+Rules:
+- 150-250 words, English only, written like a real paper abstract covering
+  problem, method, and headline results.
+- Use terminology common in recent papers of this field so that full-text
+  search and embedding similarity match real publications.
+- Never state that the paper is hypothetical; no headings, no citations,
+  no explanations outside the abstract itself.

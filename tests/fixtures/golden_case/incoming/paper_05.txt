@@ -1,0 +1,1 @@
+Source-diverse batches improve Macro-F1 for news but show no improvement for the biomedical domain; the evaluation split is not reported. These results suggest a domain-specific boundary rather than a universal benefit.

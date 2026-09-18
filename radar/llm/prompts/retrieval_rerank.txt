@@ -1,0 +1,11 @@
+Score how relevant each candidate paper is to the supplied confirmed claim
+from the user's own manuscript.
+
+Rules:
+- Give every candidate a relevance score from 0 (completely unrelated) to 10
+  (a directly comparable result on the same task, dataset, and metric).
+- Judge from the title and abstract only; never assume unstated results.
+- Prefer papers whose experimental conditions could confirm, challenge, or
+  extend the claim over papers that merely share keywords.
+- Return exactly one score entry per candidate key, each with a
+  one-sentence reason.

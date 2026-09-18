@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>Research Radar Importer</title>
+  <style>
+    body { width: 280px; font-family: system-ui, sans-serif; padding: 12px; color: #18181B; }
+    h1 { font-size: 14px; margin: 0 0 8px; }
+    label { font-size: 11px; color: #666; display: block; margin-top: 8px; }
+    input, select { width: 100%; box-sizing: border-box; margin-top: 3px; padding: 6px; font-size: 12px; border: 1px solid #d4d4d4; border-radius: 6px; background: #fff; }
+    button { width: 100%; margin-top: 12px; padding: 8px; font-size: 12px; border: 0; border-radius: 6px; background: #18181B; color: #fff; cursor: pointer; }
+    button:disabled { opacity: 0.5; }
+    #result { margin-top: 10px; font-size: 11px; white-space: pre-wrap; word-break: break-all; }
+    #recentImports { margin-top: 12px; font-size: 11px; color: #666; }
+    .recent-import { padding: 5px 0; border-top: 1px solid #eee; }
+    .recent-import-title { color: #18181B; word-break: break-word; }
+    .recent-import-time { margin-top: 2px; font-size: 10px; color: #999; }
+    .ok { color: #067647; }
+    .err { color: #B42318; }
+  </style>
+</head>
+<body>
+  <h1>Research Radar Importer</h1>
+  <label>API Base URL</label>
+  <input id="base" placeholder="http://localhost:8501/api" />
+  <label>Case ID</label>
+  <input id="caseId" placeholder="case-demo-radar" />
+  <select id="caseSelect" aria-label="选择案例" hidden disabled>
+    <option value="">请选择案例…</option>
+  </select>
+  <button id="importBtn">从当前页导入到雷达</button>
+  <div id="result"></div>
+  <div id="recentImports"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

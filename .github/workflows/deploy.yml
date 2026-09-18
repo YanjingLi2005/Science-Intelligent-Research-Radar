@@ -1,0 +1,181 @@
+name: Build and Deploy Research Radar
+
+on:
+  push:
+    branches: [main, experimental]
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: Docker image profile to build and deploy
+        required: true
+        default: standard
+        type: choice
+        options:
+          - standard
+          - enhanced
+
+concurrency:
+  group: research-radar-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      SERVER_PORT: ${{ secrets.SERVER_PORT || '22' }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
+      SERVER_GHCR_USERNAME: ${{ secrets.SERVER_GHCR_USERNAME }}
+      SERVER_GHCR_TOKEN: ${{ secrets.SERVER_GHCR_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR for image publishing
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve image profile and tag
+        id: vars
+        shell: bash
+        run: |
+          set -euo pipefail
+          profile="${{ github.event.inputs.profile || 'standard' }}"
+          case "${profile}" in
+            standard) extras="" ;;
+            enhanced) extras="full" ;;
+            *) echo "Unsupported profile: ${profile}" >&2; exit 2 ;;
+          esac
+          image_repository="ghcr.io/$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')"
+          mirror_repository="ghcr.nju.edu.cn/$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')"
+          image_tag="${GITHUB_REF_NAME}-${profile}"
+          sha_tag="sha-${GITHUB_SHA::12}-${profile}"
+          echo "profile=${profile}" >> "${GITHUB_OUTPUT}"
+          echo "extras=${extras}" >> "${GITHUB_OUTPUT}"
+          echo "image_repository=${image_repository}" >> "${GITHUB_OUTPUT}"
+          echo "mirror_repository=${mirror_repository}" >> "${GITHUB_OUTPUT}"
+          echo "image_tag=${image_tag}" >> "${GITHUB_OUTPUT}"
+          echo "sha_tag=${sha_tag}" >> "${GITHUB_OUTPUT}"
+          echo "deploy_tag=${sha_tag}" >> "${GITHUB_OUTPUT}"
+          echo "Building ${image_repository}:${image_tag} (${profile})"
+
+      - name: Build and publish image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.image_repository }}:${{ steps.vars.outputs.image_tag }}
+            ${{ steps.vars.outputs.image_repository }}:${{ steps.vars.outputs.sha_tag }}
+          build-args: |
+            NPM_REGISTRY=https://registry.npmjs.org
+            PIP_INDEX_URL=https://pypi.org/simple
+            INSTALL_EXTRAS=${{ steps.vars.outputs.extras }}
+            TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu/
+          cache-from: type=gha,scope=research-radar-${{ steps.vars.outputs.profile }}
+          cache-to: type=gha,mode=max,scope=research-radar-${{ steps.vars.outputs.profile }}
+
+      - name: Make GHCR package public for fast mirror pull (temporary, best-effort)
+        env:
+          ACTIONS_TOKEN: ${{ github.token }}
+          SERVER_GHCR_TOKEN: ${{ secrets.SERVER_GHCR_TOKEN }}
+        shell: bash
+        run: |
+          set +e
+          echo "==> Trying GitHub Actions token..."
+          curl -sS -X PATCH \
+            -H "Authorization: Bearer ${ACTIONS_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            -d '{"visibility":"public"}' \
+            https://api.github.com/user/packages/container/research-radar
+          echo
+          echo "==> Trying server GHCR token..."
+          if [ -n "${SERVER_GHCR_TOKEN}" ]; then
+            curl -sS -X PATCH \
+              -H "Authorization: Bearer ${SERVER_GHCR_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "Content-Type: application/json" \
+              -d '{"visibility":"public"}' \
+              https://api.github.com/user/packages/container/research-radar
+            echo
+          fi
+          echo "==> Package visibility step finished (best-effort)."
+
+      - name: Configure SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+
+      - name: Authenticate server to GHCR when needed
+        shell: bash
+        run: |
+          set -euo pipefail
+          ssh_opts=(
+            -o StrictHostKeyChecking=no
+            -o ConnectTimeout=15
+            -o ConnectionAttempts=3
+            -o ServerAliveInterval=60
+            -o ServerAliveCountMax=10
+            -o TCPKeepAlive=yes
+          )
+          if [ -n "${SERVER_GHCR_TOKEN}" ]; then
+            printf '%s' "${SERVER_GHCR_TOKEN}" | \
+              ssh "${ssh_opts[@]}" -p "${SERVER_PORT}" \
+                "${SERVER_USER}@${SERVER_HOST}" \
+                "docker login ghcr.io --username '${SERVER_GHCR_USERNAME}' --password-stdin"
+          else
+            echo "SERVER_GHCR_TOKEN is not set; assuming the server is already logged in to GHCR or the package is public."
+          fi
+
+      - name: Deploy image to server
+        shell: bash
+        env:
+          IMAGE_REPOSITORY: ${{ steps.vars.outputs.mirror_repository }}
+          IMAGE_TAG: ${{ steps.vars.outputs.deploy_tag }}
+          PROFILE: ${{ steps.vars.outputs.profile }}
+        run: |
+          set -euo pipefail
+          # Ship the deploy script and compose file directly over SSH so the
+          # server does not need to synchronize the repository.
+          DEPLOY_SCRIPT_B64="$(base64 < scripts/deploy_server.sh | tr -d '\n')"
+          COMPOSE_B64="$(base64 < docker-compose.yml | tr -d '\n')"
+          ssh_opts=(
+            -o StrictHostKeyChecking=no
+            -o ConnectTimeout=15
+            -o ConnectionAttempts=3
+            -o ServerAliveInterval=60
+            -o ServerAliveCountMax=10
+            -o TCPKeepAlive=yes
+          )
+          for attempt in 1 2 3 4; do
+            if timeout 1800 ssh "${ssh_opts[@]}" -p "${SERVER_PORT}" \
+                "${SERVER_USER}@${SERVER_HOST}" \
+                "set -euo pipefail; \
+                 mkdir -p /root/research-radar/scripts; \
+                 echo '${DEPLOY_SCRIPT_B64}' | base64 -d > /root/research-radar/scripts/deploy_server.sh; \
+                 chmod +x /root/research-radar/scripts/deploy_server.sh; \
+                 echo '${COMPOSE_B64}' | base64 -d > /root/research-radar/docker-compose.yml; \
+                 cd /root/research-radar; \
+                 RADAR_IMAGE_REPOSITORY='${IMAGE_REPOSITORY}' \
+                 RADAR_IMAGE_TAG='${IMAGE_TAG}' \
+                 RADAR_PROFILE='${PROFILE}' \
+                 bash scripts/deploy_server.sh"; then
+              exit 0
+            fi
+            echo "Deploy attempt ${attempt} failed, retrying in 10s..."
+            sleep 10
+          done
+          echo "All deploy attempts failed."
+          exit 1

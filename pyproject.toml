@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-radar"
+version = "0.2.0"
+description = "Local-first Research Radar MVP"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "fastapi>=0.115,<1",
+    "feedparser>=6,<7",
+    "httpx>=0.27,<1",
+    "numpy>=2,<3",
+    "pydantic>=2.9,<3",
+    "pydantic-settings>=2.6,<3",
+    "pylatexenc>=2.10,<3",
+    "pymupdf>=1.24",
+    "pymupdf4llm>=0.3",
+    "pypdf>=5,<7",
+    "python-multipart>=0.0.9",
+    "sqlalchemy>=2.0,<3",
+    "uvicorn[standard]>=0.30,<1",
+    # Core enhancements: lightweight, auto-installed with the base package
+    "pdfplumber>=0.11,<1",
+    "diff-match-patch>=20230430",
+    # Persistent vector search. Optional ML/PDF integrations live in extras
+    # below so the default server install stays lightweight and torch-free.
+    "chromadb>=0.5,<1",
+    # Model Context Protocol server for agent/IDE integrations.
+    "mcp>=1.0,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<10",
+]
+# Optional local ML integrations. The default deployment does not install
+# these packages, so it does not download the large PyTorch wheel.
+nli = [
+    "transformers>=4.40,<6",
+    "torch>=2.2.2,<3.0",
+]
+# Optional heavyweight PDF parser; the default PyMuPDF parser is retained.
+docling = [
+    "docling>=2.0",
+]
+# Optional PaperQA2 integration; it uses the configured remote/local LLM.
+paperqa = [
+    "paper-qa",
+]
+# Convenience extra for environments that explicitly want every optional
+# integration. Production should normally install the base package only.
+full = [
+    "transformers>=4.40,<6",
+    "torch>=2.2.2,<3.0",
+    "docling>=2.0",
+    "paper-qa",
+]
+
+[project.scripts]
+radar-mcp = "radar.mcp_server:main"
+
+[tool.setuptools.packages.find]
+include = ["radar*"]
+
+# Ship the LLM prompt templates with the package. Without this the wheel omits
+# every non-.py file and the Docker/installed app hits FileNotFoundError the
+# first time it extracts claims or runs a skill.
+[tool.setuptools.package-data]
+radar = [
+    "llm/prompts/*.txt",
+    "llm/prompts/pipeline/*.txt",
+    "llm/prompts/skills/*.txt",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

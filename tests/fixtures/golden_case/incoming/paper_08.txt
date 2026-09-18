@@ -1,0 +1,1 @@
+We report an expected calibration error of 0.038 for an uncertainty head. The dataset, evaluation split, and comparator are not reported, so direct comparison is not possible.

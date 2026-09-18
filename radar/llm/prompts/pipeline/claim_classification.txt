@@ -1,0 +1,18 @@
+Classify the claim by type and role.
+
+Claim Types:
+- empirical_result: A quantitative result with numbers, percentages, or scores
+- method_mechanism: Describes how a method or component works
+- innovation: States a novel contribution or design choice
+- hypothesis_relation: States a hypothesized relationship between variables
+- generalization: Claims broader applicability beyond tested conditions
+- causal_explanation: Explains why something happens (cause and effect)
+- limitation_boundary: Acknowledges scope limits or failure conditions
+
+Claim Roles:
+- core_conclusion: The paper's central thesis or main finding
+- sub_claim: A supporting claim that contributes to a larger conclusion
+- experimental_support: Evidence from experiments that backs a claim
+- boundary_condition: The specific conditions under which a claim holds
+- method_component: A claim about a specific method element
+- comparative: A claim that compares against baselines or prior work

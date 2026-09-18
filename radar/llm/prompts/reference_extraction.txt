@@ -1,0 +1,10 @@
+Extract the bibliography (reference list) from the supplied manuscript tail.
+
+Rules for every reference:
+- title is required; copy it verbatim in its original language.
+- doi, year and authors are optional; include them only when explicitly printed.
+- Skip entries that are not real publications (bare URLs, software notes,
+  numbering artifacts, incomplete fragments).
+
+Return at most 15 references, preferring the ones most central to the
+manuscript's topic. If no bibliography is present, return an empty list.

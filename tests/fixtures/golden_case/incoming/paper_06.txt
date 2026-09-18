@@ -1,0 +1,1 @@
+Removing claim-aware reranking from RadarNet reduces DomainQA exact match by 5.2 points in our independent implementation. The effect is stable across seeds.

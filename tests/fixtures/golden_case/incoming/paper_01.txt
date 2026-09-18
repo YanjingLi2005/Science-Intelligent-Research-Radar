@@ -1,0 +1,1 @@
+EchoRAG evaluates retrieval-augmented question answering under domain shift. On the DomainQA unseen-domain split, EchoRAG reaches 70.1 exact match while our RadarNet reproduction reaches 64.0 using the same BM25 baseline. We release evaluation logs for comparison.

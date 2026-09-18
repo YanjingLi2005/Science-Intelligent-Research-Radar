@@ -1,0 +1,43 @@
+.DS_Store
+.env
+.venv/
+.paper-reader-venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+# Server-generated TLS key material (self-signed until a domain is added).
+certs/
+data/*.db
+data/*.db-*
+# Per-account runtime data (multi-user mode). `data/*.db` does not match
+# nested paths, so each account's database and settings would otherwise be
+# committable.
+data/users/
+data/settings.local.env
+data/cache/
+data/papers/
+data/test_papers/
+data/snapshots/*
+!data/snapshots/.gitkeep
+data/uploads/
+data/vector_store/
+.tmp_ref/
+
+# Local duplicate build workspace; the maintained frontend lives in app/.
+research-radar-web/
+
+# Local runtime user databases and per-user data.
+data/users/
+# Local skill ledger / agent workspace.
+.jspace/
+# Screenshots and ad-hoc screen capture scripts.
+screens/
+
+# Local coding-agent home directories (never commit credentials/logs)
+.codex-home/
+.agy-home/

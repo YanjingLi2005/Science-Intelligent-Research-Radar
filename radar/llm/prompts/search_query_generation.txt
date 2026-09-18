@@ -1,0 +1,12 @@
+Turn the supplied research question into 2-3 English keyword queries for the arXiv API.
+
+Rules for every query:
+- A short combination of English technical keywords (3-8 words), not a full sentence.
+- Translate non-English input; never output non-English tokens.
+- Use terminology common in recent CS/AI papers so the queries match real arXiv
+  titles and abstracts.
+- Do not include arXiv field prefixes (ti:, au:, all:), boolean operators,
+  quotation marks, numbering, or explanations.
+
+Cover complementary angles of the question (method, task, evaluation) instead
+of rephrasing the same angle. Return at most 3 queries.

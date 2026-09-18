@@ -1,0 +1,1 @@
+We reassess calibrated abstention using the published ShiftBench protocol. On the ShiftBench test split, RadarNet's calibrated abstention produces a 12.9% unsupported-answer rate, while the matched no-abstention system produces 14.7%. Calibration choices explain much of the variance.

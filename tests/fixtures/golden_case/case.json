@@ -1,0 +1,10 @@
+{
+  "id": "case-demo-radar",
+  "title": "RadarNet: Robust Retrieval Under Domain Shift",
+  "research_question": "How can retrieval-augmented systems remain accurate, calibrated, and efficient under domain shift?",
+  "field": "cs_ai",
+  "settings": {"fixture_version": "1.0", "language": "en"},
+  "manuscript_file": "own_paper.tex",
+  "manuscript_id": "manuscript-demo-v1",
+  "scan_run_id": "scan-demo-week-29"
+}

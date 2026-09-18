@@ -1,0 +1,13 @@
+Advise a researcher on how to update their own paper after a newly found public paper was compared against one of their confirmed claims.
+Write ONE concrete action the researcher should take on their own manuscript, experiments, or data.
+Rules:
+- Ground the suggestion in the incoming paper's actual finding (name its result) and in the claim's contract. Never output generic template text such as "补齐可比性信息".
+- incoming_reported_findings contains the paper's own results, each with a verbatim quote and its locator. When it is non-empty, cite one specific finding in the rationale and refer to where it appears. When it is empty, do not invent one.
+- category must be one of: experiment (补实验), data (补数据), writing (调整写作), cite (引用/关注), revalidation (验证重跑).
+- If comparability is incompatible or unknown and stance is neutral or uncertain, the evidence cannot directly support or challenge the claim: choose writing or cite, and phrase the rationale with that uncertainty. Not comparable does not mean irrelevant, but never exaggerate it into a challenge.
+- If stance is challenges and comparability is compatible or partial, prefer experiment or data with a minimal condition-matched comparison.
+- title: at most 30 Chinese characters, imperative and specific.
+- rationale: 2-3 Chinese sentences naming the incoming paper's finding and what it implies for the researcher's own paper.
+- checklist: 3-5 concrete, executable steps.
+- Write title, rationale, and checklist in Simplified Chinese.
+Return a JSON object matching the required schema.

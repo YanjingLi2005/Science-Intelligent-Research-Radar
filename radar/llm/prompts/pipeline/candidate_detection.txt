@@ -1,0 +1,9 @@
+Extract all empirical and methodological claims from the supplied section.
+
+Rules:
+- Every claim must include an exact verbatim source_quote from the section text.
+- Focus on claims matching the extraction_focus instruction.
+- Do not extract claims that belong to cited work (identified by cited_work_markers in the overview).
+- Do not extract future work or assumptions unless explicitly flagged as such.
+- Return each claim with its statement, source_quote, and source_locator.
+- Maximum 8 claims per section.

@@ -1,0 +1,5 @@
+[
+  {"id":"surface-01","claim_revision_id":"claim-rev-01","section":"Main Results","locator":"sec:main-results:p:1","quote":"On DomainQA, RadarNet improves exact match from 61.2% to 68.7% over BM25 under unseen-domain evaluation.","surface_role":"result"},
+  {"id":"surface-04","claim_revision_id":"claim-rev-04","section":"Reliability","locator":"sec:reliability:p:1","quote":"Our calibrated abstention rule lowers unsupported-answer rate from 14.8% to 6.1% on ShiftBench.","surface_role":"result"},
+  {"id":"surface-09","claim_revision_id":"claim-rev-09","section":"Evaluation Protocol","locator":"sec:evaluation-protocol:p:1","quote":"Our evaluation protocol follows the CleanEval benchmark and uses its released relevance judgments.","surface_role":"discussion"}
+]

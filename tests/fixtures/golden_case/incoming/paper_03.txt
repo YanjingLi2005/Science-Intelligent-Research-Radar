@@ -1,0 +1,1 @@
+LayerRoute reduces median retrieval latency by 34% relative to a flat dense index on DomainQA. Nova Retrieval Lab introduces a hierarchical router designed for low-latency evidence retrieval.

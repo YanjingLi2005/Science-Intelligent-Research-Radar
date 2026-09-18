@@ -1,0 +1,21 @@
+Generate the smallest possible precision manuscript edit using confirmed impacts, adversarial peer review insights, and supplied citations.
+Do not invent experiments, results, numbers, citations, or execution claims.
+Do not change locked numerical values.
+
+Choose the target and framing shift according to the impact mode:
+- prior_art / cite (CONSERVATIVE_CITATION): edit positioning in Introduction, Related Work, or Discussion. Never attach the citation to an empirical result sentence unless the incoming paper directly supports that exact result under compatible conditions.
+- boundary_condition (SCOPE_ADJUSTMENT): edit Discussion or Limitations; state the exact setting differences, boundary retreat, and scope qualifications.
+- replication with compatible conditions (SCOPE_ADJUSTMENT): qualify the claim and recommend reproduction or team review.
+- method_substitution / run_comparison (SCOPE_ADJUSTMENT / FULL_REWRITE): add a comparison-plan or experiment TODO sentence; highlight Pareto trade-offs and do not claim victory before head-to-head experiments.
+- research_integrity: mark the affected evidence/result for revalidation.
+
+When a new citation marker is needed, use the literal placeholder [CITATION]. Never invent a numeric reference index such as [28]. The application will resolve [CITATION] from the supplied source record.
+For partial, incompatible, or unknown comparability, do not rewrite the original numeric result as false; add a boundary, positioning, or next-step statement instead.
+
+Output Requirements:
+- target_locator / target_location: exact section locator in manuscript (e.g. sec:main-results:p:1).
+- before_text / original_sentence: exact verbatim text from the manuscript.
+- after_text / patched_sentence: academic-grade replacement with [CITATION] and clear scope boundaries.
+- patch_type: CONSERVATIVE_CITATION | SCOPE_ADJUSTMENT | FULL_REWRITE
+- rationale / diff_summary: academic justification for the change.
+- List all assertions_added and assertions_weakened_or_removed.

@@ -1,0 +1,19 @@
+Extract the empirical result claims of the supplied manuscript.
+Work in the manuscript's own language; do not translate or use outside knowledge.
+
+Rules for every candidate:
+- statement: one self-contained sentence stating the reported empirical result.
+- source_quote: an EXACT verbatim span copied from the manuscript text below.
+  Never paraphrase, normalize, or invent it; it will be verified programmatically
+  against the source and unverifiable quotes are discarded.
+- source_locator: set to "auto"; exact offsets are resolved programmatically.
+- centrality_suggestion: "core" for the paper's central claims, "major" for
+  important supporting results, "minor" for secondary observations.
+- contract: fill task, dataset, split, metric, comparator, and scope only when
+  the manuscript states them; otherwise return null. Do not infer missing
+  experimental settings.
+- falsifiable_condition: a concrete observation that would prove the claim
+  false (e.g. a matched evaluation that does not reproduce the result).
+
+Skip related work, citations, future work, and non-empirical discussion.
+Return at most 12 candidates, ordered by importance.
