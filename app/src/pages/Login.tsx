@@ -3,6 +3,7 @@ import { ArrowRight, Moon, Radar, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useAuth } from '../contexts/AuthContext';
 import { Footer } from '../components/ui/footer-section';
+import ConstellationGrid from '../components/ui/constellation-grid';
 import { useLanguage } from '../contexts/languageState';
 
 const copy = {
@@ -81,7 +82,8 @@ export default function Login() {
 
   return (
     <div data-i18n-manual lang={locale === 'zh' ? 'zh-CN' : 'en'} className="relative flex min-h-screen flex-col overflow-hidden bg-paper text-ink dark:bg-night dark:text-white">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[680px] bg-[radial-gradient(ellipse_55%_55%_at_52%_0%,rgba(0,0,0,0.045),transparent)] dark:bg-[radial-gradient(ellipse_55%_55%_at_52%_0%,rgba(255,255,255,0.065),transparent)]" aria-hidden="true" />
+      <ConstellationGrid dark={resolvedTheme === 'dark'} />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-paper/25 to-paper/90 dark:via-night/25 dark:to-night/90" aria-hidden="true" />
 
       <header className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
         <div className="flex items-center gap-3">
