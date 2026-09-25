@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowRight, Moon, Radar, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { Footer } from '../components/ui/footer-section';
-import ConstellationGrid from '../components/ui/constellation-grid';
+import AetherFlowHero from '../components/ui/aether-flow-hero';
 import { useLanguage } from '../contexts/languageState';
 
 const copy = {
@@ -48,6 +49,19 @@ const englishAuthErrors: Record<string, string> = {
   '当前已关闭公开注册，请联系管理员创建账号': 'Public sign-up is closed. Contact an administrator for an account.',
 };
 
+const fadeUpVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: index * 0.2 + 0.5,
+      duration: 0.8,
+      ease: 'easeInOut' as const,
+    },
+  }),
+};
+
 export default function Login() {
   const { login, register } = useAuth();
   const { resolvedTheme, setTheme } = useTheme();
@@ -82,10 +96,16 @@ export default function Login() {
 
   return (
     <div data-i18n-manual lang={locale === 'zh' ? 'zh-CN' : 'en'} className="relative flex min-h-screen flex-col overflow-hidden bg-paper text-ink dark:bg-night dark:text-white">
-      <ConstellationGrid dark={resolvedTheme === 'dark'} />
+      <AetherFlowHero dark={resolvedTheme === 'dark'} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-paper/25 to-paper/90 dark:via-night/25 dark:to-night/90" aria-hidden="true" />
 
-      <header className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
+      <motion.header
+        custom={0}
+        variants={fadeUpVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7"
+      >
         <div className="flex items-center gap-3">
           <span className="flex size-9 items-center justify-center rounded-xl bg-[#18181B] text-white dark:border dark:border-white/15 dark:bg-white/10">
             <Radar className="size-[18px]" strokeWidth={2} aria-hidden="true" />
@@ -118,10 +138,16 @@ export default function Login() {
             {resolvedTheme === 'dark' ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
           </button>
         </div>
-      </header>
+      </motion.header>
 
       <main className="relative mx-auto grid w-full max-w-6xl flex-1 items-center gap-14 px-6 pb-24 pt-16 lg:min-h-[660px] lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-24 lg:pb-28 lg:pt-10">
-        <div className="max-w-xl">
+        <motion.div
+          custom={1}
+          variants={fadeUpVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-xl"
+        >
           <p className="mb-7 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-500 dark:text-white/45">
             <span className="h-px w-7 bg-black/30 dark:bg-white/40" aria-hidden="true" /> {t.eyebrow}
           </p>
@@ -141,9 +167,15 @@ export default function Login() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div className="relative w-full overflow-hidden rounded-[1.75rem] border border-black/10 bg-white/85 p-6 shadow-[0_24px_90px_rgba(0,0,0,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.035] dark:shadow-[0_24px_90px_rgba(0,0,0,0.25)] sm:p-9">
+        <motion.div
+          custom={2}
+          variants={fadeUpVariants}
+          initial="hidden"
+          animate="visible"
+          className="relative w-full overflow-hidden rounded-[1.75rem] border border-black/10 bg-white/85 p-6 shadow-[0_24px_90px_rgba(0,0,0,0.08)] backdrop-blur-xl dark:border-purple-400/20 dark:bg-black/55 dark:shadow-[0_24px_90px_rgba(0,0,0,0.4)] sm:p-9"
+        >
           <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[radial-gradient(ellipse_65%_100%_at_50%_0%,rgba(0,0,0,0.025),transparent)] dark:bg-[radial-gradient(ellipse_65%_100%_at_50%_0%,rgba(255,255,255,0.07),transparent)]" aria-hidden="true" />
           <div className="relative">
             <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-400 dark:text-white/40">{t.workspaceKicker}</span>
@@ -222,7 +254,7 @@ export default function Login() {
               {t.privacy}
             </p>
           </div>
-        </div>
+        </motion.div>
       </main>
       <Footer locale={locale} />
     </div>
