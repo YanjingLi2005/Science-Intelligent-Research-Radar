@@ -119,11 +119,104 @@
     @apply card;
   }
   .workspace-main {
-    background-image: radial-gradient(ellipse 60% 360px at 50% 0%, rgba(0, 0, 0, 0.035), transparent);
-    background-repeat: no-repeat;
+    background: transparent;
   }
-  .dark .workspace-main {
-    background-image: radial-gradient(ellipse 60% 360px at 50% 0%, rgba(255, 255, 255, 0.045), transparent);
+
+  /* ---------- authenticated workspace atmosphere ---------- */
+  .workspace-backdrop {
+    color: #18181b;
+    background: #f7f7f8;
+  }
+  .dark .workspace-backdrop {
+    color: #fff;
+    background: #0d0d0f;
+  }
+  .workspace-backdrop__wash {
+    background:
+      radial-gradient(ellipse 46% 34% at 78% 8%, rgba(0, 0, 0, 0.055), transparent 72%),
+      radial-gradient(ellipse 36% 30% at 26% 84%, rgba(0, 0, 0, 0.035), transparent 74%);
+  }
+  .dark .workspace-backdrop__wash {
+    background:
+      radial-gradient(ellipse 46% 34% at 78% 8%, rgba(255, 255, 255, 0.065), transparent 72%),
+      radial-gradient(ellipse 36% 30% at 26% 84%, rgba(255, 255, 255, 0.035), transparent 74%);
+  }
+  .workspace-backdrop__grid {
+    opacity: 0.22;
+    background-image:
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse 56% 48% at 75% 28%, #000 0%, transparent 76%);
+    mask-image: radial-gradient(ellipse 56% 48% at 75% 28%, #000 0%, transparent 76%);
+  }
+  .dark .workspace-backdrop__grid {
+    opacity: 0.08;
+  }
+  .workspace-backdrop__map {
+    color: currentColor;
+  }
+  .workspace-backdrop__orbit {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.1;
+    transform-origin: 1315px 178px;
+    animation: workspace-orbit 80s linear infinite;
+  }
+  .dark .workspace-backdrop__orbit {
+    opacity: 0.13;
+  }
+  .workspace-backdrop__constellation circle {
+    fill: currentColor;
+  }
+  .workspace-backdrop__orbit circle {
+    fill: none;
+  }
+  .workspace-backdrop__orbit .workspace-backdrop__node {
+    fill: currentColor;
+    stroke: none;
+  }
+  .workspace-backdrop__node-strong {
+    opacity: 0.9;
+  }
+  .workspace-backdrop__constellation {
+    stroke: currentColor;
+    stroke-width: 1.1;
+    opacity: 0.1;
+    animation: workspace-drift 30s ease-in-out infinite alternate;
+  }
+  .workspace-backdrop__constellation--bottom {
+    animation-delay: -12s;
+  }
+  .dark .workspace-backdrop__constellation {
+    opacity: 0.14;
+  }
+  .workspace-backdrop__ticks {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.13;
+  }
+  .dark .workspace-backdrop__ticks {
+    opacity: 0.18;
+  }
+  .workspace-backdrop__vignette {
+    background: linear-gradient(180deg, transparent 58%, rgba(247, 247, 248, 0.72) 100%);
+  }
+  .dark .workspace-backdrop__vignette {
+    background: linear-gradient(180deg, transparent 58%, rgba(13, 13, 15, 0.76) 100%);
+  }
+  @keyframes workspace-drift {
+    from { transform: translate3d(-6px, 3px, 0); }
+    to { transform: translate3d(8px, -5px, 0); }
+  }
+  @keyframes workspace-orbit {
+    to { transform: rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .workspace-backdrop__orbit,
+    .workspace-backdrop__constellation {
+      animation: none;
+    }
   }
   .hairline-b {
     border-bottom: 1px solid #e6e6e9;

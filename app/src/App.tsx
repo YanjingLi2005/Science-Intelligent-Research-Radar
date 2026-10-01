@@ -20,6 +20,7 @@ import OnboardingWizard from './components/OnboardingWizard';
 import { Spinner } from './components/ui/spinner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { DashboardSidebar, SidebarSearchDialog } from './components/ui/dashboard-sidebar';
+import WorkspaceBackdrop from './components/ui/workspace-backdrop';
 import { useLanguage } from './contexts/languageState';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -260,7 +261,8 @@ function Shell() {
   };
 
   return (
-    <div className="min-h-screen bg-paper text-ink flex dark:bg-night dark:text-white">
+    <div className="relative isolate flex min-h-screen bg-paper text-ink dark:bg-night dark:text-white">
+      <WorkspaceBackdrop />
       <a href="#main-content" className="sr-only z-50 rounded-md bg-white px-3 py-2 text-sm text-ink shadow focus:not-sr-only focus:fixed focus:left-4 focus:top-4">跳转到主要内容</a>
       {/* Workspace sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-40 hidden transition-[width] duration-200 md:flex ${sidebarCollapsed ? 'w-[72px]' : 'w-[260px]'}`}>
@@ -277,7 +279,7 @@ function Shell() {
       <SidebarSearchDialog open={searchOpen} cases={caseList} onClose={() => setSearchOpen(false)} onProjectSelect={openProject} onNew={goNew} />
 
       {/* ============ main column ============ */}
-      <div className={`workspace-main flex min-w-0 flex-1 flex-col transition-[padding] duration-200 ${sidebarCollapsed ? 'md:pl-[72px]' : 'md:pl-[260px]'}`}>
+      <div className={`workspace-main relative z-10 flex min-w-0 flex-1 flex-col transition-[padding] duration-200 ${sidebarCollapsed ? 'md:pl-[72px]' : 'md:pl-[260px]'}`}>
         {/* top bar */}
         <header className="sticky top-0 z-30 border-b border-hairline bg-white/85 backdrop-blur-xl dark:border-white/[0.08] dark:bg-[#101012]/90">
           <div className="flex h-[68px] items-center justify-between gap-3 px-4 md:px-8">
